@@ -1,0 +1,18 @@
+# Model assumptions. Every value needs a source and an access date.
+# Format for each entry:
+#   name:
+#     value:
+#     unit:
+#     source:
+#     accessed:   # YYYY-MM-DD
+#     notes:
+
+general:
+  analysis_years: [2022, 2023, 2024, 2025]
+  currency: EUR
+
+# Filled in as each module is built.
+credit_enhancement: {}
+aggregation: {}
+firming: {}
+risk: {}

@@ -1,0 +1,21 @@
+# R
+.Rhistory
+.RData
+.Rproj.user/
+.Ruserdata
+
+# renv (the lockfile is committed; the library is not)
+renv/library/
+renv/staging/
+
+# Quarto
+/.quarto/
+paper/_freeze/
+paper/*_files/
+
+# Private material: never commit
+private/
+interviews/
+
+# macOS
+.DS_Store
