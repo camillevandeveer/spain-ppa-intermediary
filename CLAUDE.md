@@ -26,6 +26,7 @@ The approach is an **illustrative techno-economic analysis** inside a policy ana
 ## Folder layout
 
 - `data/raw/`: original downloads. **Never edit or overwrite.**
+  - Exception: `data/raw/resource_tracker/(final) resource_ppa_summary_spain.xlsx` (the checked, filled-in copy of the template; read with `read_tracker()` in `R/resource_tracker.R`) is entered by hand by the user from the RE-Source tracker. The tracker only gives aggregates, not deal-level data. Sheet `snapshots` holds one row per filter set (total MW, number of deals). Sheets `sectors`, `technologies`, `companies` and `deal_types` hold the separate breakdowns (MW per item), linked to a snapshot by `snapshot_id`. Breakdowns cannot be cross-tabulated with each other. Column definitions are in sheet `codebook`. Code only reads this file; never rename its sheets or columns.
 - `data/interim/`, `data/processed/`: cleaned and model-ready data, always produced by code.
 - `config/assumptions.yaml`: every numeric assumption, each with a source.
 - `R/`: reusable functions.
@@ -42,3 +43,7 @@ The approach is an **illustrative techno-economic analysis** inside a policy ana
 - Every external number goes into `config/assumptions.yaml` with its source and access date.
 - Add simple sanity checks to data loaders (e.g. 8,760 or 8,784 hours per year, no missing hours).
 - Interview notes and personal data must not be committed; keep them outside the repository or in an ignored folder.
+
+## Progress log
+
+A running plain-language summary for the user's research partner lives in a Claude Doc: "Spain PPA research: progress log" (https://claude.ai/code/artifact/d29e26d6-bf14-4140-8d69-a1226f695cf5). After each meaningful step (new data, new results, a changed plan), update the relevant section and add a row to its "Update log" table (newest first). Keep the language non-technical.
