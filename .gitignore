@@ -19,3 +19,9 @@ interviews/
 
 # macOS
 .DS_Store
+
+# R graphics device output from non-interactive runs
+Rplots.pdf
+
+# Excel lock files
+~$*
