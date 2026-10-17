@@ -17,8 +17,7 @@ raw_dir <- here("data", "raw", "omie", "marginalpdbc")
 download_omie_prices("2024-04-01", "2024-04-30", raw_dir)
 
 # 2. Read them into one table and check it
-prices <- read_omie_prices(raw_dir) |>
-  filter(date >= as.Date("2024-04-01"), date <= as.Date("2024-04-30")) |>
+prices <- read_omie_prices(raw_dir, "2024-04-01", "2024-04-30") |>
   rename(hour = period)
 
 # April has 30 days and no clock change, so we expect exactly 30 × 24 rows
