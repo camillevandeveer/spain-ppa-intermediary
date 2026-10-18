@@ -4,8 +4,11 @@
 
 1. **SQ1:** For which buyers and projects is Spain's corporate PPA market not accessible, and why?
 2. **SQ2:** How could tripartite agreements, with a public intermediary between generators and buyers, close that gap?
+3. **SQ3:** How could the state-backed intermediary be structured (institution, contract role, procurement on both sides, products, funding), and how does each design change what it can achieve and what risk the state carries?
 
 The approach is an **illustrative techno-economic analysis** inside a policy analysis. It is not a market forecast.
+
+Key context: CATF, "Tripartite contracting for clean electricity" (https://www.catf.us/resource/tripartite-contracting-for-clean-electricity/), which proposes a state entity as central counterparty to generators and industrial consumers.
 
 ## Barrier → intermediary function → metric
 
@@ -14,7 +17,8 @@ The approach is an **illustrative techno-economic analysis** inside a policy ana
 | SMEs without strong credit | Can't post collateral / not an acceptable counterparty | Credit enhancement | Δ PPA price (€/MWh), collateral avoided |
 | Buyers with demand too small | Load far below one project's output | Aggregation (back-to-back contracts) | Buyers per project, transaction cost €/MWh |
 | Energy-intensive, flat 24/7 demand | Solar/wind shape mismatch | Portfolio firming (wind + solar + storage) | Hourly match %, firming cost €/MWh |
-| Households | Too small, high transaction cost | Qualitative only (retailers, cooperatives, energy communities) | — |
+
+Households are out of scope for now (decided by the user and their partner, 17 Oct 2026).
 
 ## Modules (SQ2)
 
@@ -22,6 +26,34 @@ The approach is an **illustrative techno-economic analysis** inside a policy ana
 2. Aggregation: buyers per project and transaction cost per MWh.
 3. Hourly shape/firming: portfolio grid vs. load profiles using hourly OMIE prices and generation profiles. **Core module.**
 4. Public-risk Monte Carlo: buyer defaults × price paths → expected and tail loss for the intermediary.
+
+## Step 1.3: sizing the excluded market (decisions of 18 Oct 2026)
+
+Goal: electricity demand (TWh/year) outside today's PPA market, split by barrier.
+
+- **Scope:** all non-household demand (businesses and public sector), with industry shown separately using the sector data.
+- **Segments,** following Eurostat's annual consumption bands (dataset `nrg_pc_205_v`, share of non-household consumption by band; totals from energy balances `nrg_bal_c`):
+  - Very small: under 0.5 GWh (bands IA–IB). Barrier: size and transaction costs.
+  - Small and medium: 0.5–20 GWh (bands IC–ID). Barrier: size and credit.
+  - Large: 20 GWh and over (bands IE–IG). Can sign alone; flat-demand industry (chemicals, metals, non-metallic minerals, paper) faces the shape barrier.
+- **"Too small to sign alone" = under 20 GWh/year;** test 2 and 70 GWh as sensitivities. The 1 GWh guarantee-fund threshold falls inside band IC, so report it as a range using the 0.5 and 2 GWh band edges.
+- **Consumer vs. company:** bands count consumers, not firms (multi-site chains look small). Add INE firm-size data (DIRCE firm counts by employees and sector) to estimate demand by company size. TODO: check whether INE publishes electricity use by firm size (e.g. its industrial energy consumption survey).
+- Sector and size come from separate tables and cannot be cross-tabulated.
+
+## Intermediary design options (SQ3)
+
+Mostly qualitative. Sketch a short list of designs (2–4) early, before Step 1.3 and before fixing module assumptions, because the design decides which modules apply and which data are needed; then assess the designs in full after the modules run. Design dimensions:
+
+| Dimension | Options to compare |
+|---|---|
+| Contract role | Guarantor only (bilateral PPA stays between generator and buyer) · Central counterparty / principal (buys from generators, sells back-to-back to buyers) · Platform / aggregator (standard contracts and matching, little balance-sheet risk) |
+| Institutional home | Existing body (e.g. IDAE, ICO, CESCE) · new public vehicle · public–private set-up |
+| Generator-side procurement | Competitive auction · standardised tender · bilateral negotiation |
+| Buyer-side allocation | Eligibility rules (size, sector, credit, load profile) · open enrolment vs. allocation rounds · pricing (pass-through vs. fixed) |
+| Product | Pay-as-produced · baseload · shaped / 24/7 · physical vs. financial (CfD) · tenor |
+| Funding and risk capital | Guarantee fund · fees · state budget · EU / EIB backing; state-aid compliance |
+
+How design links to the modules: credit enhancement (Module 1) applies to every design except a pure platform; aggregation (Module 2) applies to principal and platform designs; shape risk (Module 3) and most of the public risk (Module 4) fall on the state only in the principal design.
 
 ## Folder layout
 
