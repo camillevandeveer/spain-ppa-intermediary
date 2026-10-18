@@ -11,6 +11,42 @@ general:
   analysis_years: [2022, 2023, 2024, 2025]
   currency: EUR
 
+# Step 1.3: sizing the excluded market (analysis/05_size_excluded_market.R)
+market_sizing:
+  base_year:
+    value: 2024
+    notes: Latest year with both Eurostat energy balances and consumption-band shares.
+  too_small_cutoff_gwh:
+    value: 20
+    sensitivities: [2, 70]
+    unit: GWh per consumer per year
+    source: Decision of the user and research partner, 2026-10-18 (Eurostat band edges)
+  band_shares_apply_to_non_household_total:
+    value: true
+    source: Eurostat nrg_pc_205_v (band shares) and nrg_bal_c (final consumption minus households)
+    accessed: 2026-10-18
+    notes: Assumes the band shares from the price statistics describe the same non-household total as the energy balance. Not tested against a second source.
+  flat_demand_sectors:
+    value: [FC_IND_IS_E, FC_IND_CPC_E, FC_IND_NFM_E, FC_IND_NMM_E, FC_IND_PPP_E]
+    names: [iron and steel, chemicals and petrochemicals, non-ferrous metals, non-metallic minerals, paper and pulp]
+    source: Research team's choice of continuous-process industries
+    notes: Their electricity use is a proxy for round-the-clock demand; individual plants are not checked.
+  sme_employee_limit:
+    value: 250
+    unit: employees (EU SME definition)
+    source: EU Recommendation 2003/361/EC
+  electricity_by_firm_size_method:
+    value: employment share
+    source: INE structural business statistics 2024 (tables 76825, 76819, 76813)
+    accessed: 2026-10-18
+    notes: Each sector group's electricity use is split across firm-size classes in proportion to employment. Assumes equal electricity use per employee across firm sizes; likely understates large energy-intensive plants. INE does not publish electricity use by firm size.
+  capacity_factor_method:
+    value: computed from data
+    years: [2022, 2023, 2024]
+    source: Eurostat nrg_bal_peh (gross production, GWh) and nrg_inf_epcrw (net capacity, MW)
+    accessed: 2026-10-18
+    notes: Capacity factor = production / (average of start- and end-of-year capacity x hours in year), averaged over the years. Uses all Spanish solar PV and wind, not PPA plants specifically. "Wind and Solar" and "Renewables Portfolio" deals use the average of the solar and wind factors.
+
 # Filled in as each module is built.
 credit_enhancement: {}
 aggregation: {}
