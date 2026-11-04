@@ -70,6 +70,43 @@ shape_mismatch:
     value: average day-ahead price minus the PPA's capture price (output-weighted average price)
     unit: EUR per MWh of demand
     notes: With an annual volume match, the buyer sells surplus and buys shortfall at the spot price; the net cost of doing so per MWh of demand equals this difference.
+  capacity_adjustment:
+    value: hourly output divided by installed capacity (hourly capacity factor)
+    source: Energy-Charts yearly installed power for Spain ("Solar AC", "Wind onshore"), api.energy-charts.info/installed_power
+    accessed: 2026-11-04
+    notes: >
+      Energy-Charts' yearly figure is capacity at the start of the year (its value for year t matches Eurostat's
+      year-end t-1). Capacity is interpolated linearly between the start of one year and the start of the next,
+      so a fast-growing fleet does not over-weight later months. The start of 2026 is not yet published:
+      TODO replace the assumption that capacity grew in 2025 by the same amount (GW) as in 2024.
+
+# Portfolio coverage (Module 3, Part A): solar + wind + batteries for a flat factory
+# (analysis/07_portfolio_coverage.R)
+portfolio_coverage:
+  years:
+    value: [2022, 2023, 2024, 2025]
+  solar_shares:
+    value: [0, 0.25, 0.5, 0.75, 1]
+    notes: Share of the portfolio's yearly output that comes from solar; the rest is wind.
+  oversizing:
+    value: [1, 1.5, 2, 3]
+    unit: portfolio yearly output / factory yearly demand
+  battery_hours:
+    value: [0, 2, 4, 8]
+    unit: hours of factory demand the battery can store
+    notes: Battery power is set equal to factory demand, so a full battery can run the factory alone for this many hours.
+  battery_round_trip_efficiency:
+    value: 0.82
+    sensitivity: 0.85
+    source: U.S. EIA, "Utility-scale batteries and pumped storage return about 80% of the electricity they store", Today in Energy, 12 Feb 2021 (US utility-scale battery fleet, 2019 average); sensitivity from NREL Annual Technology Baseline (85%, confirmed only via a secondary source)
+    accessed: 2026-11-04
+    notes: Losses are split equally between charging and discharging.
+  battery_dispatch:
+    value: charge from surplus, discharge into shortfall, no forecasting
+    notes: A simple rule; a real operator that forecasts and trades would do somewhat better, so coverage is slightly understated.
+  coverage_targets:
+    value: [0.8, 0.9, 0.95]
+    notes: Hourly match levels used to describe what each portfolio achieves.
 
 # Filled in as each module is built.
 credit_enhancement: {}

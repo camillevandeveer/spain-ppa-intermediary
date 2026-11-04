@@ -20,6 +20,7 @@ library(here)
 library(yaml)
 
 source(here("R", "energy_charts.R"))
+source(here("R", "portfolio.R"))
 
 assumptions <- read_yaml(here("config", "assumptions.yaml"))$shape_mismatch
 years <- unlist(assumptions$years$value)
@@ -51,6 +52,12 @@ generation <- generation |>
   ungroup()
 stopifnot(!anyNA(generation$mw))
 
+# Divide output by installed capacity at each hour, so the profile describes a
+# fixed set of plants rather than a fleet that keeps growing during the year
+capacity <- read_energy_charts_capacity(here("data", "raw", "energy_charts"))
+generation <- add_capacity_factor(generation, capacity)
+stopifnot(!anyNA(generation$capacity_factor), all(generation$capacity_factor < 1))
+
 # 2. Hourly day-ahead prices (from script 03), on the same UTC clock -------------
 # OMIE's hour 1 is 00:00-01:00 Spanish time; counting hours from local midnight
 # keeps clock-change days (23 or 25 hours) correct.
@@ -71,7 +78,7 @@ hourly <- hourly |>
   group_by(technology, year) |>
   mutate(
     demand = 1,
-    ppa    = mw / sum(mw) * n(),
+    ppa    = capacity_factor / sum(capacity_factor) * n(),
     used   = pmin(ppa, demand),
     surplus   = pmax(ppa - demand, 0),
     shortfall = pmax(demand - ppa, 0)
