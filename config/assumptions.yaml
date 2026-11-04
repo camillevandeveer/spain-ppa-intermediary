@@ -47,6 +47,30 @@ market_sizing:
     accessed: 2026-10-18
     notes: Capacity factor = production / (average of start- and end-of-year capacity x hours in year), averaged over the years. Uses all Spanish solar PV and wind, not PPA plants specifically. "Wind and Solar" and "Renewables Portfolio" deals use the average of the solar and wind factors.
 
+# Shape barrier for SQ1: a flat-demand factory vs. a single-technology PPA
+# (analysis/06_shape_mismatch.R)
+shape_mismatch:
+  years:
+    value: [2022, 2023, 2024, 2025]
+  generation_profiles:
+    value: Spanish national hourly solar and onshore wind output
+    source: Energy-Charts (Fraunhofer ISE), api.energy-charts.info/public_power, based on ENTSO-E Transparency data
+    accessed: 2026-10-18
+    notes: The national fleet is smoother than a single plant, so the mismatch shown is a lower bound. 15-minute values are averaged to hours.
+  demand_profile:
+    value: flat (same demand every hour of the year)
+    source: Research team's archetype for continuous-process industry
+  ppa_sizing:
+    value: annual volume match
+    notes: The PPA is sized so its yearly output equals the factory's yearly demand (the usual "100% renewable" claim). Results are shares and EUR/MWh, so the factory's size does not matter.
+  prices:
+    value: OMIE Spanish day-ahead price, hourly
+    source: data/processed/omie_prices_hourly_2022_2025.csv (script 03)
+  shape_cost_definition:
+    value: average day-ahead price minus the PPA's capture price (output-weighted average price)
+    unit: EUR per MWh of demand
+    notes: With an annual volume match, the buyer sells surplus and buys shortfall at the spot price; the net cost of doing so per MWh of demand equals this difference.
+
 # Filled in as each module is built.
 credit_enhancement: {}
 aggregation: {}

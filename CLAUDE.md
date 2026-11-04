@@ -40,6 +40,18 @@ Goal: electricity demand (TWh/year) outside today's PPA market, split by barrier
 - **Consumer vs. company:** bands count consumers, not firms (multi-site chains look small). Add INE firm-size data (DIRCE firm counts by employees and sector) to estimate demand by company size. TODO: check whether INE publishes electricity use by firm size (e.g. its industrial energy consumption survey).
 - Sector and size come from separate tables and cannot be cross-tabulated.
 
+## Step 1.4: the credit barrier (added 18 Oct 2026)
+
+Steps 1.2–1.3 show who is outside the market by size; they do not show that credit is what keeps them out. This step does. Three parts:
+
+1. **What generators require** (literature, qualitative): credit terms in Spanish/European PPAs: investment-grade requirement, letters of credit, parent guarantees, collateral period, tenor. Sources: RE-Source, Pexapark/LevelTen reports, law-firm PPA guides, interviews; the CESCE-managed guarantee fund for electro-intensive consumers as evidence the barrier is recognised. Notes go in `literature/notes/`.
+2. **Who cannot meet them** (quantitative proxies, by firm size):
+   - ECB/EC SAFE survey (ECB data portal, dataflow `SAFE`, `REF_AREA = ES`, firm sizes MIC/SML/MED/SME/LAR, half-yearly to 2025-S2): financing obstacles (`FOB`), collateral requirements (`Q10`, item `10E`), loan outcomes (`Q7B`). Checked 18 Oct 2026: in 2025 the share of Spanish firms with bank-loan obstacles was similar across sizes (about 5–11%), so short-term bank finance is a weak proxy for the long-term PPA credit barrier. Use it as context only.
+   - Better proxies for 10–15-year counterparty risk, still to check: firm survival rates by size (INE business demography), insolvency/default rates by size (Banco de España), and the share of firms with a public credit rating.
+3. **Who is in the market today** (optional look-up): public ratings (S&P/Moody's/Fitch) of the top 20–30 tracker buyers (about two-thirds of contracted MW).
+
+Module 1 later quantifies the barrier (collateral needed, its cost, PPA price with and without a state guarantee) and Module 4 the risk the state takes on.
+
 ## Intermediary design options (SQ3)
 
 Mostly qualitative. Sketch a short list of designs (2–4) early, before Step 1.3 and before fixing module assumptions, because the design decides which modules apply and which data are needed; then assess the designs in full after the modules run. Design dimensions:

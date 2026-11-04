@@ -219,7 +219,7 @@ coverage <- tibble(
 coverage
 write_csv(coverage, file.path(tables_dir, "05_ppa_coverage.csv"))
 
-# Figure: business demand by consumer size next to all PPAs, on one scale ------------
+# Figure A: business demand by consumer size next to all PPAs, on one scale -----------
 # Two bars on the same TWh scale, so the PPA total is compared with total demand
 # (not with single slices of it).
 segment_levels <- c("Very small (under 0.5 GWh)", "Small and medium (0.5–20 GWh)", "Large (20 GWh and over)")
@@ -272,5 +272,40 @@ fig <- ggplot(plot_data, aes(x = twh, y = bar, fill = part)) +
         plot.caption = element_text(hjust = 0, size = 8, colour = "grey35"))
 
 fig
-ggsave(here("outputs", "figures", "05_demand_by_consumer_size.png"), fig,
+ggsave(here("outputs", "figures", "05a_demand_vs_ppas.png"), fig,
        width = 9, height = 4, dpi = 300, bg = "white")
+
+# Figure B: business demand in each consumption band ---------------------------------
+band_colours <- c(
+  "Very small (under 0.5 GWh)"        = "#9cc3ee",
+  "Small and medium (0.5–20 GWh)" = "#2a78d6",
+  "Large (20 GWh and over)"           = "#174a85"
+)
+
+band_plot <- demand_by_band |>
+  mutate(band_label = factor(band_label, levels = band_label),
+         segment = factor(segment, levels = names(band_colours)))
+largest_band <- slice_max(band_plot, twh)
+
+fig_b <- ggplot(band_plot, aes(x = band_label, y = twh, fill = segment)) +
+  geom_col(width = 0.7) +
+  geom_text(aes(label = round(twh)), vjust = -0.5, size = 3.3, colour = "grey20") +
+  scale_fill_manual(values = band_colours, name = NULL) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.12))) +
+  labs(
+    title = paste0("Consumers using ", largest_band$band_label, " a year make up the largest share of business demand (",
+                   round(largest_band$twh), " TWh)"),
+    subtitle = paste0("Spain, ", base_year, ": electricity use of businesses and public bodies by annual use per consumer (TWh), ",
+                      "total ", round(non_household_gwh / 1000), " TWh"),
+    x = "Annual electricity use per consumer",
+    y = "Electricity use (TWh)",
+    caption = "Sources: Eurostat nrg_pc_205_v and nrg_bal_c; our calculation (script 05)."
+  ) +
+  theme_minimal(base_size = 11) +
+  theme(panel.grid.minor = element_blank(), panel.grid.major.x = element_blank(), legend.position = "top",
+        plot.title.position = "plot", plot.caption.position = "plot",
+        plot.caption = element_text(hjust = 0, size = 8, colour = "grey35"))
+
+fig_b
+ggsave(here("outputs", "figures", "05b_demand_by_band.png"), fig_b,
+       width = 9, height = 5.5, dpi = 300, bg = "white")
